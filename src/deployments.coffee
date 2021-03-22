@@ -12,11 +12,16 @@ module.exports = (repo, cb) ->
         body.force = opts.force
       if opts.payload?
         body.payload = opts.payload
+      if opts.environment?
+        body.environment = opts.environment
       if opts.auto_merge?
         body.auto_merge = opts.auto_merge
       if opts.description?
         body.description = opts.description
       self.post "repos/#{self.qualified_repo repo}/deployments", body, (data) =>
-        cb sha: data.sha, description: data.description, url: data.url
+        if data.errors and data.errors.length > 0
+          cb data
+        else
+          cb sha: data.sha,description: data.description, url: data.url
     status: (id, cb) =>
       self.get("repos/#{self.qualified_repo repo}/deployments/#{id}/statuses", cb)

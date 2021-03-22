@@ -66,6 +66,7 @@ class Github
           statusCode: res.statusCode
           body: body
           error: responseData.message
+        cb responseData
 
   get: (url, data, cb) ->
     unless cb?
